@@ -1,0 +1,61 @@
+!=======================================================
+! R-Ararat — Running Configuration
+! Western Victoria Health Services (WVHS)
+! NIT1104 Group 2 — Assessment 3
+!=======================================================
+
+hostname R-Ararat
+
+service password-encryption
+enable secret cisco123
+
+banner motd ^AUTHORISED ACCESS ONLY - WVHS^
+
+!
+! --- LAN Interfaces ---
+!
+
+interface GigabitEthernet0/0
+ description LAN-Ararat-Clinic
+ ip address 10.7.2.49 255.255.255.240
+ no shutdown
+
+!
+! --- WAN Interfaces ---
+!
+
+interface Serial0/3/0
+ description WAN-to-Ballarat
+ ip address 10.7.2.82 255.255.255.252
+ no shutdown
+
+!
+! --- Static Routes ---
+!
+
+ip route 0.0.0.0 0.0.0.0 10.7.2.81
+
+!
+! --- Line Access Control ---
+!
+
+line con 0
+ password cisco123
+ login
+
+line vty 0 4
+ password cisco123
+ login
+
+!
+end
+write memory
+
+!=======================================================
+! Interface Summary:
+!   Gi0/0       10.7.2.49/28    LAN - Ararat Clinic
+!   Se0/3/0     10.7.2.82/30    WAN - to Ballarat (DTE)
+!
+! Static Routes:
+!   0.0.0.0/0 via 10.7.2.81     (Default route to Ballarat)
+!=======================================================

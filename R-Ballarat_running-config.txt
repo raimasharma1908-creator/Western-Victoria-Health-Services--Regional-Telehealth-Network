@@ -1,0 +1,89 @@
+!=======================================================
+! R-Ballarat — Running Configuration
+! Western Victoria Health Services (WVHS)
+! NIT1104 Group 2 — Assessment 3
+!=======================================================
+
+hostname R-Ballarat
+
+service password-encryption
+enable secret cisco123
+
+banner motd ^AUTHORISED ACCESS ONLY - WVHS^
+
+!
+! --- LAN Interfaces ---
+!
+
+interface GigabitEthernet0/0
+ description LAN-Radiology
+ ip address 10.7.2.1 255.255.255.240
+ no shutdown
+
+interface GigabitEthernet0/1
+ description LAN-Administration
+ ip address 10.7.2.17 255.255.255.240
+ no shutdown
+
+interface FastEthernet0/2/0
+ description LAN-Cardiology
+ switchport mode access
+ no shutdown
+
+interface FastEthernet0/2/1
+ description LAN-IT-Infrastructure
+ switchport mode access
+ no shutdown
+
+!
+! --- WAN Interfaces ---
+!
+
+interface Serial0/3/0
+ description WAN-to-Ararat
+ ip address 10.7.2.81 255.255.255.252
+ clock rate 64000
+ no shutdown
+
+interface Serial0/3/1
+ description WAN-to-Horsham
+ ip address 10.7.2.85 255.255.255.252
+ clock rate 64000
+ no shutdown
+
+!
+! --- Static Routes ---
+!
+
+ip route 10.7.2.48 255.255.255.240 10.7.2.82
+ip route 10.7.2.32 255.255.255.240 10.7.2.86
+
+!
+! --- Line Access Control ---
+!
+
+line con 0
+ password cisco123
+ login
+
+line vty 0 4
+ password cisco123
+ login
+
+!
+end
+write memory
+
+!=======================================================
+! Interface Summary:
+!   Gi0/0       10.7.2.1/28     LAN - Radiology
+!   Gi0/1       10.7.2.17/28    LAN - Administration
+!   Fa0/2/0     L2 Switchport   LAN - Cardiology
+!   Fa0/2/1     L2 Switchport   LAN - IT Infrastructure
+!   Se0/3/0     10.7.2.81/30    WAN - to Ararat (DCE)
+!   Se0/3/1     10.7.2.85/30    WAN - to Horsham (DCE)
+!
+! Static Routes:
+!   10.7.2.48/28 via 10.7.2.82  (Ararat LAN)
+!   10.7.2.32/28 via 10.7.2.86  (Horsham LAN)
+!=======================================================

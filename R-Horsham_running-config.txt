@@ -1,0 +1,61 @@
+!=======================================================
+! R-Horsham — Running Configuration
+! Western Victoria Health Services (WVHS)
+! NIT1104 Group 2 — Assessment 3
+!=======================================================
+
+hostname R-Horsham
+
+service password-encryption
+enable secret cisco123
+
+banner motd ^AUTHORISED ACCESS ONLY - WVHS^
+
+!
+! --- LAN Interfaces ---
+!
+
+interface GigabitEthernet0/0
+ description LAN-Horsham-Clinic
+ ip address 10.7.2.33 255.255.255.240
+ no shutdown
+
+!
+! --- WAN Interfaces ---
+!
+
+interface Serial0/3/0
+ description WAN-to-Ballarat
+ ip address 10.7.2.86 255.255.255.252
+ no shutdown
+
+!
+! --- Static Routes ---
+!
+
+ip route 0.0.0.0 0.0.0.0 10.7.2.85
+
+!
+! --- Line Access Control ---
+!
+
+line con 0
+ password cisco123
+ login
+
+line vty 0 4
+ password cisco123
+ login
+
+!
+end
+write memory
+
+!=======================================================
+! Interface Summary:
+!   Gi0/0       10.7.2.33/28    LAN - Horsham Clinic
+!   Se0/3/0     10.7.2.86/30    WAN - to Ballarat (DTE)
+!
+! Static Routes:
+!   0.0.0.0/0 via 10.7.2.85     (Default route to Ballarat)
+!=======================================================
